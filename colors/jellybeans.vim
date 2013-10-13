@@ -63,6 +63,10 @@ else
   let s:low_color = 1
 endif
 
+if !exists('g:jellybeans_use_term_italics')
+  let g:jellybeans_use_term_italics = 1
+endif
+
 " Color approximation functions by Henry So, Jr. and David Liang {{{
 " Added to jellybeans.vim by Daniel Herbert
 
@@ -288,7 +292,12 @@ fun! s:X(group, fg, bg, attr, lcfg, lcbg)
   if a:attr == ""
     exec "hi ".a:group." gui=none cterm=none"
   else
-    let l:noitalic = join(filter(split(a:attr, ","), "v:val !=? 'italic'"), ",")
+    let l:noitalic = ""
+    if g:jellybeans_use_term_italics
+      let l:noitalic = a:attr
+    else
+      let l:noitalic = join(filter(split(a:attr, ","), "v:val !=? 'italic'"), ",")
+    endif
     if empty(l:noitalic)
       let l:noitalic = "none"
     endif
